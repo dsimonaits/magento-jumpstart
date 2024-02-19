@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * This file is part of the Magebit package.
+    *
+    * DISCLAIMER
+    *
+    * Do not edit or add to this file if you wish to upgrade
+    * to newer versions in the future.
+    *
+    * @copyright Copyright (c) 2020 Magebit, Ltd. (https://magebit.com/)
+    * @license GNU General Public License ("GPL") v3.0
+    *
+    * For the full copyright and license information, please view the LICENSE
+    * file that was distributed with this source code.
+    */
+-->
+
+<!-- File: app/design/frontend/Vendor/Theme/Magento_Catalog/layout/catalog_product_view_type_simple.xml -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- Other layout updates for the page -->
+
+        <!-- Reference Container for Main Content -->
+        <referenceContainer name="content">
+            <!-- Wrapper div for styling -->
+            <container name="product.info.media.simple.wrapper" htmlTag="div" htmlClass="product-info-media-simple-wrapper"/>
+
+            <!-- Wrapper div for styling -->
+            <container name="product.info.simple.wrapper" htmlTag="div" htmlClass="product-info-simple-wrapper"/>
+
+            <!-- Wrapper div for related products -->
+            <container name="catalog.product.simple.related.wrapper" htmlTag="div" htmlClass="catalog-product-simple-related-wrapper"/>
+
+            <!-- Customize Add to Cart Block -->
+            <referenceBlock class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" template="Magento_Catalog::product/view/catalog_product_view_type_simple/addtocart.phtml"/>
+
+            <!-- Customize Product Attributes Block -->
+            <referenceBlock class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes" template="Magento_Catalog::product/view/catalog_product_view_type_simple/attributes.phtml"/>
+        </referenceContainer>
+
+
+        <!-- Remove unwanted blocks -->
+        <referenceBlock name="product.info.details" remove="true"/>
+        <referenceBlock name="product.info.social" remove="true"/>
+        <referenceBlock name="product.info.stock.sku" remove="true"/>
+        <referenceBlock name="product.info.block.actions" remove="true"/>
+
+        <!-- Move elements as needed -->
+        <move element="product.info.main" destination="product.info.simple.wrapper" before="-"/>
+        <move element="product.info.media" destination="product.info.media.simple.wrapper" before="-"/>
+        <move element="product.info.sku" destination="product.info.price" after="price.final"/>
+        <move element="product.info.upsell" destination="product.info.addtocart" after="-"/>
+        <move element="product.attributes" destination="product.info.main" after="product.info.price"/>
+
+        <!-- Move related products block -->
+        <move element="catalog.product.related" destination="catalog.product.simple.related.wrapper" before="-"/>
+    </body>
+</page>
+

@@ -1,0 +1,26 @@
+<?php
+use Magento\Framework\View\Element\Template;
+use Magebit\FirstLayout\ViewModel\ProductViewModel;
+/** @var Template $block */
+/** @var ProductViewModel $productData */
+
+$productData = $block->getData('viewModel');
+$sku ='24-MB04';
+$product = $productData->getProductBySku($sku);
+?>
+<h1>My First Template</h1>
+<p>With Layout support</p>
+<p><?= $escaper->escapeHTML($block->getData('custom_parameter')) ?></p>
+
+<?php
+if ($product) : ?>
+
+<h1>Data from ViewModel</h1>
+<h3><?= $product->getName() ?></h3>
+<p><?= $product->getDescription() ?></p>
+<?php else: ?>
+<p>Product not found.</p>
+<?php endif; ?>
+
+
+<!--<h1>--><?php //= $productData->test(); ?><!--</h1>-->

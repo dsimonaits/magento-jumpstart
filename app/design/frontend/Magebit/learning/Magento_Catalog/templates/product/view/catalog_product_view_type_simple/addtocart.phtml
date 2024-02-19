@@ -1,0 +1,96 @@
+<?php
+/**
+ * This file is part of the Magebit package.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade
+ * to newer versions in the future.
+ *
+ * @copyright Copyright (c) 2024 Magebit, Ltd. (https://magebit.com/)
+ * @license GNU General Public License ("GPL") v3.0
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+?>
+<?php $_product = $block->getProduct (); ?>
+<?php $buttonTitle = __ ('Add to Cart'); ?>
+<?php if ($_product->isSaleable ()) : ?>
+
+
+    <?php $productDefaultQty = $block->getProductDefaultQty () * 1; ?>
+    <?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance ();
+    $StockState = $objectManager->get ('\Magento\CatalogInventory\Api\StockStateInterface');
+    $productStockQty = $StockState->getStockQty ($_product->getId (), $_product->getStore ()->getWebsiteId ());
+    ?>
+    <?php
+    $iconPath = $block->getViewFileUrl('Magento_Catalog::images/check-mark.svg');
+    $svgCheckMark = file_get_contents($iconPath);
+    ?>
+
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "qty-counter": {
+                            "component": "Magento_Catalog/js/qty-counter",
+                            "initialValue": "<?= $productDefaultQty ?>",
+                            "totalInStock": "<?= $productStockQty ?>"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <div class="box-tocart">
+        <div class="fieldset">
+            <?php if ($block->shouldRenderQuantity ()) : ?>
+                <div class="field qty">
+                    <div data-bind="scope: 'qty-counter'" class="control">
+                        <div class="qty-button-wrapper">
+                            <button class="qty-counter-btn" type="button" data-bind="click: decrease"><span
+                                    class="qty-counter-sign minus">&minus;</span></button>
+                            <input class="input-text qty qty-counter-input" data-bind="textInput: count" type="number"
+                                   name="qty"
+                                   id="qty"
+                                   min="0"
+                                   value="<?= $productDefaultQty ?>"
+                                   title="<?= $block->escapeHtmlAttr (__ ('Qty')) ?>"
+                                   data-validate="<?= $block->escapeHtml (json_encode ($block->getQuantityValidators ())) ?>"
+                            />
+                            <button class="qty-counter-btn" type="button" data-bind="click: increase"><span
+                                    class="qty-counter-sign plus">&plus;</span></button>
+
+                        </div>
+                        <div class="stock-available-wrapper">
+                            <span class="stock available"><span class="stock-check-mark"><?= $svgCheckMark ?> </span><?= $block->escapeHtml (__ ('In stock')) ?></span>
+                            <?= $productStockQty ?> items available
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="actions">
+                <button type="submit"
+                        title="<?= $block->escapeHtmlAttr ($buttonTitle) ?>"
+                        class="action primary tocart"
+                        id="product-addtocart-button" disabled>
+                    <span><?= $block->escapeHtml ($buttonTitle) ?></span>
+                </button>
+                <?= $block->getChildHtml ('', true) ?>
+
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>
