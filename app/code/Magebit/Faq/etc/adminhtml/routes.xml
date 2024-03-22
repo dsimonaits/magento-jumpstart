@@ -10,13 +10,10 @@
  */
 -->
 
-
-
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="standard">
-        <route id="magebit_firstpage" frontName="firstpage">
-            <module name="Magebit_FirstPage" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="faq" frontName="faq">
+            <module name="Magebit_Faq" before="Magento_Backend"/>
         </route>
     </router>
 </config>

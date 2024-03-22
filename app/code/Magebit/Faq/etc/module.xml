@@ -11,9 +11,9 @@
 -->
 
 <!-- app/code/Magebit/PageListWidget/etc/module.xml -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magebit_FirstPage" setup_version="1.0.0">
-        <!-- The name attribute specifies the module name -->
-        <!-- The setup_version attribute specifies the version of your module's setup scripts -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Magebit_Faq" setup_version="1.0.0">
+
     </module>
 </config>

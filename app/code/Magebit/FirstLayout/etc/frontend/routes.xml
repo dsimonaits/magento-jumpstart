@@ -24,8 +24,5 @@
         <route id="magebit_firstlayout" frontName="firstlayout">
             <module name="Magebit_FirstLayout" />
         </route>
-        <route id="magebit_firstlayout_user" frontName="createuser">
-            <module name="Magebit_FirstLayout" />
-        </route>
     </router>
 </config>
