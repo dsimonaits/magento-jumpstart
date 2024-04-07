@@ -8,8 +8,8 @@ class Status implements OptionSourceInterface
     public function toOptionArray(): array
     {
         $options = [
-            ['value' => 1, 'label' => 'Enabled'],
-            ['value' => 0, 'label' => 'Disabled'],
+            ['label' => 'Enabled', 'value' => 1, ],
+            ['label' => 'Disabled', 'value' => 0],
         ];
 
         // Log the options array to var/log/system.log
