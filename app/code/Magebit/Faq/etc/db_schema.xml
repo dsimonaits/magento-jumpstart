@@ -9,7 +9,12 @@
  * file that was distributed with this source code.
  */
 -->
-
+<!--
+/**
+ * Declarative Schema for the 'Magebit_Faq' module.
+ * Defines the 'magebit_faq' table with columns for ID, question, answer, status, position, and update timestamp.
+ */
+-->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="magebit_faq" resource="default" engine="innodb" comment="Magebit FAQ Table">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
@@ -21,6 +26,5 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
-
     </table>
 </schema>

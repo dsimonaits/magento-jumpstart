@@ -12,12 +12,17 @@ namespace Magebit\Faq\Model\Question;
 
 use Magebit\Faq\Model\ResourceModel\Question\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
+use Psr\Log\LoggerInterface;
 
 class DataProvider extends AbstractDataProvider
 {
+
+    protected $logger;
     protected $loadedData;
 
+
     public function __construct(
+        LoggerInterface $logger,
         $name,
         $primaryFieldName,
         $requestFieldName,
@@ -25,8 +30,11 @@ class DataProvider extends AbstractDataProvider
         array $meta = [],
         array $data = []
     ) {
+        $this->logger = $logger;
+        $this->logger->info('DataProvider constructor is called'); // Log message for constructor
         $this->collection = $collectionFactory->create();
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+
     }
 
     public function getData()
@@ -34,12 +42,12 @@ class DataProvider extends AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-
         $items = $this->collection->getItems();
-        foreach ($items as $question) {
-            $this->loadedData[$question->getId()] = $question->getData();
+        foreach ($items as $item) {
+            $this->loadedData[$item->getId()] = $item->getData();
         }
 
+        $this->logger->info('Loaded data: ' . print_r($this->loadedData, true));
         return $this->loadedData;
     }
 }

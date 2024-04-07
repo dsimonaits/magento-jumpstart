@@ -63,10 +63,15 @@ class QuestionRepository implements QuestionRepositoryInterface
     public function getList(SearchCriteriaInterface $criteria)
     {
         $collection = $this->questionCollectionFactory->create();
-
         $this->collectionProcessor->process($criteria, $collection);
 
-        $collection->load();
+        /** @var \Magento\Framework\Api\SearchResults $searchResults */
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($criteria);
+        $searchResults->setItems($collection->getItems());
+        $searchResults->setTotalCount($collection->getSize());
+
+        return $searchResults;
     }
     /**
      * @throws CouldNotSaveException

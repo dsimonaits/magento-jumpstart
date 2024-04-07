@@ -1,62 +1,76 @@
 <?php
-/**
- * @copyright Copyright (c) 2024 Magebit (https://magebit.com/)
- * @author info@magebit.com
- * @license GNU General Public License ("GPL") v3.0
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Magebit\Faq\Controller\Adminhtml\Question;
 
-class Save extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magebit\Faq\Api\QuestionRepositoryInterface;
+use Magebit\Faq\Model\Question;
+use Magebit\Faq\Model\QuestionFactory;
+use Magento\Framework\Exception\LocalizedException;
+
+class Save extends Action
 {
-    const ADMIN_RESOURCE = 'Magebit_Faq::manage';
-    protected $faqModel;
-    protected $faqResourceModel;
+    const ADMIN_RESOURCE = 'Magebit_Faq::save';
+
+    protected $questionFactory;
+    protected $questionRepository;
+    protected $dataPersistor;
 
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magebit\Faq\Model\Question $faqModel,
-        \Magebit\Faq\Model\ResourceModel\Question $faqResourceModel
+        Action\Context $context,
+        QuestionFactory $questionFactory,
+        QuestionRepositoryInterface $questionRepository,
+        DataPersistorInterface $dataPersistor
     ) {
         parent::__construct($context);
-        $this->faqModel = $faqModel;
-        $this->faqResourceModel = $faqResourceModel;
+        $this->questionFactory = $questionFactory;
+        $this->questionRepository = $questionRepository;
+        $this->dataPersistor = $dataPersistor;
     }
 
     public function execute()
     {
-        // Check if form data is posted
+        $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPostValue();
+
+if (empty($data['question']) || empty($data['answer'])) {
+    $this->messageManager->addErrorMessage(__('The question and answer fields cannot be empty.'));
+    // Redirect back to form with or without the entity ID, based on your context
+    return $resultRedirect->setPath('*/*/edit', ['id' => $data['id'] ?? null]);
+}
+
         if ($data) {
-            // Initialize model
-            $model = $this->faqModel;
+            $id = $data['id'] ?? null;
+            $model = ($id) ? $this->questionRepository->getById($id) : $this->questionFactory->create();
 
-            // Load the item if we have an ID
-            $id = $this->getRequest()->getParam('id');
-            if ($id) {
-                $this->faqResourceModel->load($model, $id);
-            }
-
-            // Set data to model
             $model->setData($data);
 
-            // Save model to database
             try {
-                $this->faqResourceModel->save($model);
-                $this->messageManager->addSuccessMessage(__('FAQ saved successfully.'));
-                // Check if 'Save and Continue'
-                if ($this->getRequest()->getParam('back')) {
-                    return $this->_redirect('*/*/edit', ['id' => $model->getId(), '_current' => true]);
-                }
-                return $this->_redirect('*/*/');
-            } catch (\Exception $e) {
+                $this->questionRepository->save($model);
+                $this->messageManager->addSuccessMessage(__('You saved the question.'));
+                $this->dataPersistor->clear('faq_question');
+                return $this->processQuestionReturn($model, $data, $resultRedirect);
+            } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-                return $this->_redirect('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+            } catch (\Exception $e) {
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the question.'));
             }
+
+            $this->dataPersistor->set('faq_question', $data);
+            return $resultRedirect->setPath('*/*/edit', ['id' => $id]);
         }
-        return $this->_redirect('*/*/');
+        return $resultRedirect->setPath('*/*/');
+    }
+
+    private function processQuestionReturn($model, $data, $resultRedirect)
+    {
+        $redirect = $data['back'] ?? 'close';
+
+        if ($redirect === 'continue') {
+            return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
+        } elseif ($redirect === 'duplicate') {
+            // Handle duplication logic if necessary, similar to Magento CMS
+        }
+        return $resultRedirect->setPath('*/*/');
     }
 }

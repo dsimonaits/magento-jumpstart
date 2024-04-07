@@ -11,8 +11,28 @@ namespace Magebit\Faq\Api;
 
 use Magebit\Faq\Api\Data\QuestionInterface;
 
+/**
+ * Interface QuestionManagementInterface
+ *
+ * @api
+ */
 interface QuestionManagementInterface
 {
+    /**
+     * Enable a question.
+     *
+     * @param QuestionInterface $question
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function enableQuestion(QuestionInterface $question);
+
+    /**
+     * Disable a question.
+     *
+     * @param QuestionInterface $question
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function disableQuestion(QuestionInterface $question);
 }

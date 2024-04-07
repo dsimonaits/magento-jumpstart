@@ -12,7 +12,7 @@ namespace Magebit\Faq\Controller\Adminhtml\Question;
 
 class Delete extends \Magento\Backend\App\Action
 {
-    const ADMIN_RESOURCE = 'Magebit_Faq::manage';
+    const ADMIN_RESOURCE = 'Magebit_Faq::delete';
     protected $faqModel;
     protected $faqResourceModel;
 

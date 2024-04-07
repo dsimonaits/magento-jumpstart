@@ -9,26 +9,31 @@
  */
 
 namespace Magebit\Faq\Controller\Adminhtml\Question;
+use Psr\Log\LoggerInterface;
 
 class Index extends \Magento\Backend\App\Action
 {
-    const ADMIN_RESOURCE = 'Magebit_Faq::faq_manager'; // Must match the ACL resource ID
+    protected $logger;
+    const ADMIN_RESOURCE = 'Magebit_Faq::manage'; // Must match the ACL resource ID
 
     protected $resultPageFactory;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory, LoggerInterface $logger
     ) {
+        $this->logger =$logger;
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
     }
 
     public function execute()
     {
+        $this->logger->info("FAQ page accessed");
+
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magebit_Faq::faq_manager'); // Must match the menu ID
-        $resultPage->getConfig()->getTitle()->prepend(__('FAQs'));
+        $resultPage->getConfig()->getTitle()->prepend(__('FAQ Questions'));
 
         return $resultPage;
     }

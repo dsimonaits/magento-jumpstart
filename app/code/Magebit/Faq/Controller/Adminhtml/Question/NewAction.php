@@ -12,7 +12,7 @@ namespace Magebit\Faq\Controller\Adminhtml\Question;
 
 class NewAction extends \Magento\Backend\App\Action
 {
-    const ADMIN_RESOURCE = 'Magebit_Faq::manager';
+    const ADMIN_RESOURCE = 'Magebit_Faq::manage';
 
     public function execute()
     {

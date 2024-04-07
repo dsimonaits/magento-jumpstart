@@ -11,12 +11,21 @@ namespace Magebit\Faq\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magebit\Faq\Api\Data\QuestionInterface;
+use Magebit\Faq\Model\ResourceModel\Question as QuestionResource;
 
+/**
+ * Class Question
+ *
+ * @package Magebit\Faq\Model
+ */
 class Question extends AbstractModel implements QuestionInterface
 {
+    /**
+     * Initialize resource model.
+     */
     protected function _construct()
     {
-        $this->_init(\Magebit\Faq\Model\ResourceModel\Question::class);
+        $this->_init(QuestionResource::class);
     }
 
     public function getId()
