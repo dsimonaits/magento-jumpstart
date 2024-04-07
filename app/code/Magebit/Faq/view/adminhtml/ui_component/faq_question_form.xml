@@ -72,16 +72,32 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="question" formElement="input">
+        <field name="question" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">block</item>
+                </item>
+            </argument>
             <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
                 <dataType>text</dataType>
                 <label translate="true">Question</label>
                 <dataScope>question</dataScope>
             </settings>
         </field>
-        <field name="answer" formElement="input">
+        <field name="answer" sortOrder="30" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">block</item>
+                </item>
+            </argument>
             <settings>
-                <dataType>html</dataType>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
                 <label translate="true">Answer</label>
                 <dataScope>answer</dataScope>
             </settings>
